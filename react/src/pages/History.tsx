@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { CalendarDays } from 'lucide-react'
+import { ArrowLeft, CalendarDays } from 'lucide-react'
+import HistorySummaryCards from './HistorySummaryCards'
+import RecentSessions from './RecentSessions'
 
 type HistoryFilter = 'daily' | 'weekly' | 'monthly'
 
-function History() {
+function History({ onBack }: { onBack: () => void }) {
   const [selectedFilter, setSelectedFilter] =
     useState<HistoryFilter>('weekly')
 
@@ -31,10 +33,17 @@ function History() {
   const currentChart = chartData[selectedFilter]
 
   return (
-    <div className="app">
-      {/* Header */}
+    <>
+
       <header className="history-header">
         <div className="history-header-inner">
+          <button
+            className="history-back-button"
+            onClick={onBack}
+            aria-label="Back to home"
+            >
+            <ArrowLeft size={20} />
+          </button>
           <div className="history-title">
             <img
               src="/src/assets/realign_logo.png"
@@ -57,10 +66,8 @@ function History() {
         </div>
       </header>
 
-      {/* Content */}
       <main className="history-content">
 
-        {/* Filter */}
         <div className="history-filter">
           {[
             { label: 'Daily', value: 'daily' },
@@ -81,7 +88,6 @@ function History() {
           ))}
         </div>
 
-        {/* Chart Card */}
         <div className="history-chart-card">
           <div className="history-chart-header">
             <h2>{currentChart.title}</h2>
@@ -91,7 +97,9 @@ function History() {
             </span>
           </div>
 
-          {/* Chart */}
+          <HistorySummaryCards filter={selectedFilter} />
+          <RecentSessions />
+
           <div className="history-chart">
             <div className="history-y-axis">
               <span>100</span>
@@ -124,7 +132,7 @@ function History() {
         </div>
 
       </main>
-    </div>
+    </>
   )
 }
 
